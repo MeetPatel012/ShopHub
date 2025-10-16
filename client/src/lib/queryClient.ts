@@ -28,32 +28,27 @@ function mockApiRequest(
       responseData = mockProducts.find((p) => p.id === productId) || null;
     } else if (url === "/api/cart") {
       if (method === "GET") {
-        responseData = mockCartItems;
+        // Return empty array since cart is handled by localStorage in cart-context
+        responseData = [];
       } else if (method === "POST") {
-        const newItem = { id: Date.now().toString(), ...data };
-        mockCartItems.push(newItem);
-        responseData = newItem;
+        // Just return success for cart operations
+        responseData = { success: true };
       } else if (method === "DELETE") {
-        mockCartItems.length = 0;
         responseData = { success: true };
       }
     } else if (url.startsWith("/api/cart/")) {
       const itemId = url.split("/")[3];
       if (method === "PATCH") {
-        const item = mockCartItems.find((item) => item.id === itemId);
-        if (item) {
-          item.quantity = (data as any).quantity;
-          responseData = item;
-        }
+        responseData = { success: true };
       } else if (method === "DELETE") {
-        const index = mockCartItems.findIndex((item) => item.id === itemId);
-        if (index > -1) {
-          mockCartItems.splice(index, 1);
-          responseData = { success: true };
-        }
+        responseData = { success: true };
       }
     } else if (url === "/api/orders") {
-      const newOrder = { id: Date.now().toString(), ...data };
+      const newOrder = {
+        id: Date.now().toString(),
+        ...(data as object),
+        status: "completed",
+      };
       mockOrders.push(newOrder);
       responseData = newOrder;
     }
