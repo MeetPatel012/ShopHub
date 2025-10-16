@@ -19,5 +19,10 @@
       "src": "/(.*)",
       "dest": "/client/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "server/index.ts": {
+      "maxDuration": 30
+    }
+  }
 }
